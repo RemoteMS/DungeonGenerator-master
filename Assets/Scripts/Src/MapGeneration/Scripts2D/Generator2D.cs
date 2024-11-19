@@ -4,10 +4,12 @@ using UnityEngine;
 using Random = System.Random;
 using Graphs;
 using Graphs.Src.Helpers;
+using MapGeneration;
+using MapGeneration.Presentation.MapInfo;
 
 public class Generator2D : MonoBehaviour
 {
-    private enum CellType
+    public enum CellType
     {
         None,
         Room,
@@ -158,6 +160,8 @@ public class Generator2D : MonoBehaviour
     {
         var aStar = new DungeonPathfinder2D(size);
 
+        var paths = new List<Path>();
+
         foreach (var edge in _selectedEdges)
         {
             var startRoom = (edge.U as Vertex<Room>).Item;
@@ -215,13 +219,18 @@ public class Generator2D : MonoBehaviour
                     }
                 }
 
-                foreach (var pos in path)
-                {
-                    if (_grid[pos] == CellType.Hallway)
-                    {
-                        PlaceHallway(pos);
-                    }
-                }
+                paths.Add(new Path(path));
+            }
+        }
+
+        CorridorData.EnsureUniquePaths(paths, _grid);
+
+        foreach (var path in paths)
+        {
+            foreach (var point in path.Points)
+            {
+                if (_grid[point] == CellType.Hallway)
+                    PlaceHallway(point);
             }
         }
     }
