@@ -223,15 +223,55 @@ public class Generator2D : MonoBehaviour
             }
         }
 
+        paths = CorridorData.ValidateAndSplitPaths(paths, _grid);
         CorridorData.EnsureUniquePaths(paths, _grid);
 
         foreach (var path in paths)
         {
-            foreach (var point in path.Points)
+            PlaceHallwayLocally(path);
+        }
+    }
+
+
+    private void PlaceHallwayLocally(Path path, int i = 0)
+    {
+        var pathPos = path.GetMinPoint().ToVector3();
+
+        var p = new GameObject(path.ToString())
+        {
+            transform =
             {
-                if (_grid[point] == CellType.Hallway)
-                    PlaceHallway(point);
+                position = pathPos + new Vector3Int(0, i, 0)
             }
+        };
+
+        foreach (var point in path.Points)
+        {
+            if (_grid[point] != CellType.Hallway) continue;
+
+            var localPosition = new Vector3(point.x, 0, point.y) - pathPos;
+
+            var go = Instantiate(cubePrefab, p.transform);
+            go.transform.localPosition = localPosition;
+            go.transform.localScale = new Vector3(1, 1, 1);
+
+            go.GetComponent<MeshRenderer>().material = blueMaterial;
+        }
+    }
+
+
+    private void PlaceHallway(Path path)
+    {
+        var p = new GameObject(path.ToString());
+
+        foreach (var point in path.Points)
+        {
+            if (_grid[point] != CellType.Hallway) continue;
+
+            var go = Instantiate(cubePrefab, new Vector3(point.x, 0, point.y), Quaternion.identity);
+            go.GetComponent<Transform>().localScale = new Vector3(1, 1, 1);
+            go.GetComponent<MeshRenderer>().material = blueMaterial;
+            go.transform.parent = p.transform;
         }
     }
 
