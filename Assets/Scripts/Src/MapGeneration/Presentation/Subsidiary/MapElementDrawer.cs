@@ -10,6 +10,7 @@ namespace MapGeneration.Presentation.Subsidiary
         public static void DrawRoom(RoomData roomData, Vector2Int size)
         {
             var roomObject = new GameObject($"Room_{roomData.Bounds.position.x}_{roomData.Bounds.position.y}");
+            roomObject.transform.position = roomData.Bounds.position.ToVector3();
 
             for (var x = 0; x < roomData.Cells.GetLength(0); x++)
             {
@@ -17,12 +18,9 @@ namespace MapGeneration.Presentation.Subsidiary
                 {
                     var cell = roomData.Cells[x, y];
 
-                    var cellTransform = cell.Place(x, y);
-                    cellTransform.parent = roomObject.transform;
+                    cell.Place(x, y, roomObject.transform);
                 }
             }
-
-            roomObject.transform.position = roomData.Bounds.position.ToVector3();
         }
 
         public static void DrawHallwayLocally(Path path, Grid2D<CellType> grid, int i = 0)

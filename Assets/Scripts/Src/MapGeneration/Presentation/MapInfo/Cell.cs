@@ -10,10 +10,11 @@ namespace MapGeneration.Presentation.MapInfo
         public Wall Backward { get; set; } = new EmptyWall();
 
 
-        public Transform Place(int localX, int localZ)
+        public void Place(int localX, int localZ, Transform parent)
         {
             var cellObject = new GameObject($"Cell_{localX}_{localZ}");
 
+            cellObject.transform.parent = parent;
             cellObject.transform.localPosition = new Vector3(localX, 0, localZ);
 
             var floor = Object.Instantiate(GameResources.cube, cellObject.transform);
@@ -28,19 +29,15 @@ namespace MapGeneration.Presentation.MapInfo
                 PlaceWall(nameof(Forward), cellObject.transform, Vector3.forward * 0.5f);
             if (Backward is not EmptyWall)
                 PlaceWall(nameof(Backward), cellObject.transform, Vector3.back * 0.5f);
-
-            return cellObject.transform;
         }
 
-        private Transform PlaceWall(string name, Transform parent, Vector3 localOffset)
+        private void PlaceWall(string name, Transform parent, Vector3 localOffset)
         {
             var wallObject = Object.Instantiate(GameResources.cube, parent);
             wallObject.transform.localPosition = localOffset + new Vector3(0.5f, 0.5f, 0.5f);
             wallObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
             wallObject.GetComponent<MeshRenderer>().material = GameResources.Green;
             wallObject.name = name;
-
-            return wallObject.transform;
         }
 
     }

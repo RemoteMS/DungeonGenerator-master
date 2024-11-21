@@ -37,11 +37,12 @@ namespace MapGeneration.Presentation.MapInfo
 
             PlaceRooms();
             ChangeGridToRooms();
-            DrawRooms();
+
             Triangulate();
             CreateHallways();
             PathfindHallways();
             DrawHallways();
+            DrawRooms();
 
             var mapData = new MapData();
             return mapData;
