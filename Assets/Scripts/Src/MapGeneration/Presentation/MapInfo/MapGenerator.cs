@@ -30,20 +30,22 @@ namespace MapGeneration.Presentation.MapInfo
             _settings = mapGeneratorSettings;
         }
 
-        public void Generate()
+        public MapData Generate()
         {
             Random = new Random(_settings.seed);
             _grid = new Grid2D<CellType>(_settings.size, Vector2Int.zero);
 
             PlaceRooms();
-            ChangeGrid();
+            ChangeGridToRooms();
             DrawRooms();
             Triangulate();
             CreateHallways();
             PathfindHallways();
             DrawHallways();
-        }
 
+            var mapData = new MapData();
+            return mapData;
+        }
 
         private void PlaceRooms()
         {
@@ -51,7 +53,7 @@ namespace MapGeneration.Presentation.MapInfo
             _rooms = _roomPlacer.PlaceRooms();
         }
 
-        private void ChangeGrid()
+        private void ChangeGridToRooms()
         {
             foreach (var roomData in _rooms)
             {

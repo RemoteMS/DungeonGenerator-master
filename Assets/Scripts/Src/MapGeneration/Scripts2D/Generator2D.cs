@@ -224,10 +224,6 @@ public class Generator2D : MonoBehaviour
             PlaceHallwayLocally(path, -2);
         }
 
-        // paths = CorridorData.ValidateAndSplitPaths(paths, _grid);
-        // CorridorData.EnsureUniquePaths(paths, _grid);
-        // paths = CorridorData.RemoveEmptyPaths(paths, _grid);
-
 
         int iss = 0;
         foreach (var path in paths)

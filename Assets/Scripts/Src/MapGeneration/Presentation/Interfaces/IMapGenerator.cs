@@ -1,3 +1,4 @@
+using MapGeneration.Presentation.MapInfo;
 using Random = System.Random;
 
 namespace MapGeneration.Presentation
@@ -6,6 +7,6 @@ namespace MapGeneration.Presentation
     {
         Random Random { get; }
 
-        void Generate();
+        MapData Generate();
     }
 }

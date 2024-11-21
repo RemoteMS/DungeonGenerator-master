@@ -8,10 +8,14 @@ namespace MapGeneration.Presentation.Subsidiary
     {
         public static void DrawRoom(Vector2Int location, Vector2Int size)
         {
+            var r = new GameObject("Room");
+            r.transform.position = location.ToVector3();
+
             GameObject go;
-            go = Object.Instantiate(GameResources.cube, new Vector3(location.x, 0, location.y), Quaternion.identity);
+            go = Object.Instantiate(GameResources.cube, r.transform);
             go.GetComponent<Transform>().localScale = new Vector3(size.x, 1, size.y);
             go.GetComponent<MeshRenderer>().material = GameResources.Red;
+            go.transform.parent = r.transform;
         }
 
         public static void DrawHallwayLocally(Path path, Grid2D<CellType> grid, int i = 0)

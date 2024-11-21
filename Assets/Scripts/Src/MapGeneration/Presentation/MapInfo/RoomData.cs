@@ -1,17 +1,20 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MapGeneration.Presentation.MapInfo
 {
     public class RoomData : IRoom
     {
+        public RectInt Bounds { get; private set; }
+
+        private List<Vector3> _doors;
         private Vector3Int _position;
         private Vector3Int _size;
-
-        public RectInt Bounds { get; private set; }
 
         public RoomData(Vector2Int location, Vector2Int size)
         {
             Bounds = new RectInt(location, size);
+            _doors = new List<Vector3>();
         }
 
         public static bool Intersect(RoomData a, RoomData b)
