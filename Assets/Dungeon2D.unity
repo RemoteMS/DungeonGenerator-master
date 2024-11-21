@@ -338,9 +338,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fee945360a9247deafca0b0254372231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  randomGenerate: 1
+  randomGenerate: 0
   mapGeneratorSettings:
-    seed: 1731991838
+    seed: 1732201419
     size: {x: 40, y: 40}
     roomCount: 100
     roomMinSize: {x: 3, y: 2}

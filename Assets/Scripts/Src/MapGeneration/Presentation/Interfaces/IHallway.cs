@@ -1,6 +1,6 @@
 namespace MapGeneration.Presentation
 {
-    public interface ICorridor
+    public interface IHallway
     {
 
     }

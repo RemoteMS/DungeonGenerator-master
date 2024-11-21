@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 using Graphs;
-using Graphs.Src.Helpers;
+using Helpers;
 using MapGeneration;
 using MapGeneration.Presentation.Enums;
 using MapGeneration.Presentation.MapInfo;

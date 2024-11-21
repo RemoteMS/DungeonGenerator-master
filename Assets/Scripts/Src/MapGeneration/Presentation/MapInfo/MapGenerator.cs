@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Graphs;
-using Graphs.Src.Helpers;
+using Helpers;
 using MapGeneration.Presentation.Enums;
 using MapGeneration.Presentation.Subsidiary;
 using MapGeneration.Settings;
@@ -68,7 +68,7 @@ namespace MapGeneration.Presentation.MapInfo
         {
             foreach (var roomData in _rooms)
             {
-                MapElementDrawer.DrawRoom(roomData.Bounds.position, roomData.Bounds.size);
+                MapElementDrawer.DrawRoom(roomData, roomData.Bounds.size);
             }
         }
 

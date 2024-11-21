@@ -1,21 +1,28 @@
-using Graphs.Src.Helpers;
+using Helpers;
 using MapGeneration.Presentation.Enums;
+using MapGeneration.Presentation.MapInfo;
 using UnityEngine;
 
 namespace MapGeneration.Presentation.Subsidiary
 {
     public class MapElementDrawer
     {
-        public static void DrawRoom(Vector2Int location, Vector2Int size)
+        public static void DrawRoom(RoomData roomData, Vector2Int size)
         {
-            var r = new GameObject("Room");
-            r.transform.position = location.ToVector3();
+            var roomObject = new GameObject($"Room_{roomData.Bounds.position.x}_{roomData.Bounds.position.y}");
 
-            GameObject go;
-            go = Object.Instantiate(GameResources.cube, r.transform);
-            go.GetComponent<Transform>().localScale = new Vector3(size.x, 1, size.y);
-            go.GetComponent<MeshRenderer>().material = GameResources.Red;
-            go.transform.parent = r.transform;
+            for (var x = 0; x < roomData.Cells.GetLength(0); x++)
+            {
+                for (var y = 0; y < roomData.Cells.GetLength(1); y++)
+                {
+                    var cell = roomData.Cells[x, y];
+
+                    var cellTransform = cell.Place(x, y);
+                    cellTransform.parent = roomObject.transform;
+                }
+            }
+
+            roomObject.transform.position = roomData.Bounds.position.ToVector3();
         }
 
         public static void DrawHallwayLocally(Path path, Grid2D<CellType> grid, int i = 0)

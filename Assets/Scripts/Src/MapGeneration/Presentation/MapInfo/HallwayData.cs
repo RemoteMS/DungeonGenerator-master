@@ -3,12 +3,8 @@ using UnityEngine;
 
 namespace MapGeneration.Presentation.MapInfo
 {
-    public class HallwayData : ICorridor
+    public class HallwayData : IHallway
     {
         private HashSet<Vector2Int> _corridorPoints;
-
-        public void Generate()
-        {
-        }
     }
 }

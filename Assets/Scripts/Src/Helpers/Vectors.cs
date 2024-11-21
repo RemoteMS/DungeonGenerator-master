@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Graphs.Src.Helpers
+namespace Helpers
 {
     public static class Vectors
     {

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Graphs.Src.Helpers;
+using Helpers;
 using UnityEngine;
 
 namespace MapGeneration
