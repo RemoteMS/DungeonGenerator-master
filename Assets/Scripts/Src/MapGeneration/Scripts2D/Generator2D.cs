@@ -5,16 +5,12 @@ using Random = System.Random;
 using Graphs;
 using Graphs.Src.Helpers;
 using MapGeneration;
+using MapGeneration.Presentation.Enums;
 using MapGeneration.Presentation.MapInfo;
 
 public class Generator2D : MonoBehaviour
 {
-    public enum CellType
-    {
-        None,
-        Room,
-        Hallway
-    }
+    
 
     private class Room
     {
@@ -223,12 +219,29 @@ public class Generator2D : MonoBehaviour
             }
         }
 
-        paths = CorridorData.ValidateAndSplitPaths(paths, _grid);
-        CorridorData.EnsureUniquePaths(paths, _grid);
-
         foreach (var path in paths)
         {
-            PlaceHallwayLocally(path);
+            PlaceHallwayLocally(path, -2);
+        }
+
+        // paths = CorridorData.ValidateAndSplitPaths(paths, _grid);
+        // CorridorData.EnsureUniquePaths(paths, _grid);
+        // paths = CorridorData.RemoveEmptyPaths(paths, _grid);
+
+
+        int iss = 0;
+        foreach (var path in paths)
+        {
+            path.DrawPath(iss);
+            PlaceHallwayLocally(path, iss++);
+
+            if (iss == 10)
+            {
+                foreach (var vector2Int in path.Points)
+                {
+                    Debug.Log(_grid[vector2Int]);
+                }
+            }
         }
     }
 
