@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Graphs;
 using Helpers;
+using MapGeneration.Helpers;
 using MapGeneration.Presentation.Enums;
 using MapGeneration.Presentation.Subsidiary;
 using MapGeneration.Settings;
@@ -16,6 +18,7 @@ namespace MapGeneration.Presentation.MapInfo
 
         public Random Random { get; private set; }
         private Grid2D<CellType> _grid;
+        private Grid2D<Cell> _cellGrid;
 
         private List<Path> _paths;
         private List<RoomData> _rooms;
@@ -34,6 +37,7 @@ namespace MapGeneration.Presentation.MapInfo
         {
             Random = new Random(_settings.seed);
             _grid = new Grid2D<CellType>(_settings.size, Vector2Int.zero);
+            _cellGrid = new Grid2D<Cell>(_settings.size, Vector2Int.zero);
 
             PlaceRooms();
             ChangeGridToRooms();
@@ -41,6 +45,14 @@ namespace MapGeneration.Presentation.MapInfo
             Triangulate();
             CreateHallways();
             PathfindHallways();
+
+            FillCellsGrid();
+            ValidateAndSplitPaths();
+            PlaceDoors();
+            EnsureUniquePaths();
+
+            PlaceCells();
+
             DrawHallways();
             DrawRooms();
 
@@ -178,19 +190,109 @@ namespace MapGeneration.Presentation.MapInfo
                 }
             }
 
-
-            paths = ValidateAndSplitPaths(paths, _grid);
-            EnsureUniquePaths(paths, _grid);
-
             _paths = paths;
         }
 
+        private void FillCellsGrid()
+        {
+            foreach (var path in _paths)
+            {
+                foreach (var point in path.Points)
+                {
+                    _cellGrid[point] = new Cell();
+                }
+            }
 
-        private static List<Path> ValidateAndSplitPaths(List<Path> paths, Grid2D<CellType> grid)
+            foreach (var roomData in _rooms)
+            {
+                var width = roomData.Bounds.size.x;
+                var height = roomData.Bounds.size.y;
+
+                for (var x = 0; x < width; x++)
+                {
+                    for (var y = 0; y < height; y++)
+                    {
+                        _cellGrid[x + roomData.Bounds.xMin, y + roomData.Bounds.yMin] = new Cell();
+                    }
+                }
+            }
+        }
+
+
+        private void PlaceDoors()
+        {
+            foreach (var path in _paths)
+            {
+                for (var index = 0; index < path.Points.Count - 1; index++)
+                {
+                    var point = path.Points[index];
+                    var pointNext = path.Points[index + 1];
+
+                    if (_grid[point] == CellType.Room && _grid[pointNext] == CellType.Hallway)
+                    {
+                        var cell = _cellGrid[point];
+                        var direction = GetDirection(pointNext - point);
+
+                        switch (direction)
+                        {
+                            case Direction.Left:
+                                cell.Left = new Door();
+                                break;
+                            case Direction.Backward:
+                                cell.Backward = new Door();
+                                break;
+                            case Direction.Right:
+                                cell.Right = new Door();
+                                break;
+                            case Direction.Forward:
+                                cell.Forward = new Door();
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                    else if (_grid[pointNext] == CellType.Room && _grid[point] == CellType.Hallway)
+                    {
+                        var cell = _cellGrid[pointNext];
+                        var direction = GetDirection(point - pointNext);
+
+                        switch (direction)
+                        {
+                            case Direction.Left:
+                                cell.Left = new Door();
+                                break;
+                            case Direction.Backward:
+                                cell.Backward = new Door();
+                                break;
+                            case Direction.Right:
+                                cell.Right = new Door();
+                                break;
+                            case Direction.Forward:
+                                cell.Forward = new Door();
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                }
+            }
+        }
+
+        private Direction GetDirection(Vector2Int direction)
+        {
+            if (direction == Vector2Int.left) return Direction.Left;
+            if (direction == Vector2Int.right) return Direction.Right;
+            if (direction == Vector2Int.up) return Direction.Forward;
+            if (direction == Vector2Int.down) return Direction.Backward;
+
+            throw new ArgumentException("Wrong direction");
+        }
+
+        private void ValidateAndSplitPaths()
         {
             var resultPaths = new List<Path>();
 
-            foreach (var path in paths)
+            foreach (var path in _paths)
             {
                 var points = path.Points;
                 var currentPathPoints = new List<Vector2Int>();
@@ -198,7 +300,7 @@ namespace MapGeneration.Presentation.MapInfo
 
                 foreach (var point in points)
                 {
-                    var cellType = grid[point.x, point.y];
+                    var cellType = _grid[point.x, point.y];
 
                     if (cellType == CellType.Room)
                     {
@@ -230,30 +332,30 @@ namespace MapGeneration.Presentation.MapInfo
                 }
             }
 
-            return resultPaths;
+            _paths = resultPaths;
         }
 
-        private void EnsureUniquePaths(List<Path> paths, Grid2D<CellType> grid)
+        private void EnsureUniquePaths()
         {
-            for (var i = 0; i < paths.Count; i++)
+            for (var i = 0; i < _paths.Count; i++)
             {
-                for (var j = i + 1; j < paths.Count; j++)
+                for (var j = i + 1; j < _paths.Count; j++)
                 {
-                    var intersection = paths[i].Points
-                        .Intersect(paths[j].Points)
-                        .Where(pos => grid[pos.x, pos.y] == CellType.Hallway)
+                    var intersection = _paths[i].Points
+                        .Intersect(_paths[j].Points)
+                        .Where(pos => _grid[pos.x, pos.y] == CellType.Hallway)
                         .ToList();
 
                     if (intersection.Any())
                     {
-                        paths[i].Merge(paths[j]);
-                        paths.RemoveAt(j);
+                        _paths[i].Merge(_paths[j]);
+                        _paths.RemoveAt(j);
                         j--;
                     }
                 }
             }
 
-            paths.RemoveAll(path => path.Points.All(pos => grid[pos.x, pos.y] != CellType.Hallway));
+            _paths.RemoveAll(path => path.Points.All(pos => _grid[pos.x, pos.y] != CellType.Hallway));
         }
 
         private void DrawHallways()

@@ -21,14 +21,10 @@ namespace MapGeneration.Presentation.MapInfo
             floor.GetComponent<Transform>().localScale = new Vector3(1, 0.1f, 1);
             floor.GetComponent<MeshRenderer>().material = GameResources.Red;
 
-            if (Right is not EmptyWall)
-                PlaceWall(nameof(Right), cellObject.transform, Vector3.right * 0.5f);
-            if (Left is not EmptyWall)
-                PlaceWall(nameof(Left), cellObject.transform, Vector3.left * 0.5f);
-            if (Forward is not EmptyWall)
-                PlaceWall(nameof(Forward), cellObject.transform, Vector3.forward * 0.5f);
-            if (Backward is not EmptyWall)
-                PlaceWall(nameof(Backward), cellObject.transform, Vector3.back * 0.5f);
+            Right.PlaceWall(nameof(Right), cellObject.transform, Vector3.right       * 0.5f);
+            Left.PlaceWall(nameof(Left), cellObject.transform, Vector3.left          * 0.5f);
+            Forward.PlaceWall(nameof(Forward), cellObject.transform, Vector3.forward * 0.5f);
+            Backward.PlaceWall(nameof(Backward), cellObject.transform, Vector3.back  * 0.5f);
         }
 
         private void PlaceWall(string name, Transform parent, Vector3 localOffset)
