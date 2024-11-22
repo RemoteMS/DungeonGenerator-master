@@ -14,6 +14,24 @@ namespace MapGeneration.Presentation.MapInfo
 {
     public class MapGenerator : IMapGenerator
     {
+        public class Room
+        {
+            public RectInt Bounds;
+
+            public Room(Vector2Int location, Vector2Int size)
+            {
+                Bounds = new RectInt(location, size);
+            }
+
+            public static bool Intersect(Room a, Room b)
+            {
+                return !(a.Bounds.position.x >= b.Bounds.position.x + b.Bounds.size.x ||
+                         a.Bounds.position.x                        + a.Bounds.size.x <= b.Bounds.position.x ||
+                         a.Bounds.position.y >= b.Bounds.position.y + b.Bounds.size.y ||
+                         a.Bounds.position.y + a.Bounds.size.y <= b.Bounds.position.y);
+            }
+        }
+
         private readonly MapGeneratorSettings _settings;
 
         public Random Random { get; private set; }
@@ -21,7 +39,11 @@ namespace MapGeneration.Presentation.MapInfo
         private Grid2D<Cell> _cellGrid;
 
         private List<Path> _paths;
+        private List<Room> _roomsBases;
+
         private List<RoomData> _rooms;
+        private List<HallwayData> _hallways;
+
         private Delaunay2D _delaunay;
         private HashSet<Prim.Edge> _selectedEdges;
 
@@ -51,7 +73,8 @@ namespace MapGeneration.Presentation.MapInfo
             PlaceDoors();
             EnsureUniquePaths();
 
-            PlaceCells();
+            ConvertRooms();
+            ConvertHallways();
 
             DrawHallways();
             DrawRooms();
@@ -60,15 +83,32 @@ namespace MapGeneration.Presentation.MapInfo
             return mapData;
         }
 
+        private void ConvertRooms()
+        {
+            _rooms = new List<RoomData>();
+
+            foreach (var room in _roomsBases)
+            {
+                _rooms.Add(new RoomData(room.Bounds, _cellGrid));
+            }
+
+            _roomsBases.Clear();
+            _roomsBases = null;
+        }
+
+        private void ConvertHallways()
+        {
+        }
+
         private void PlaceRooms()
         {
             _roomPlacer = new RandomBaseRoomPlacer(this, _settings);
-            _rooms = _roomPlacer.PlaceRooms();
+            _roomsBases = _roomPlacer.PlaceRooms();
         }
 
         private void ChangeGridToRooms()
         {
-            foreach (var roomData in _rooms)
+            foreach (var roomData in _roomsBases)
             {
                 foreach (var pos in roomData.Bounds.allPositionsWithin)
                 {
@@ -90,10 +130,10 @@ namespace MapGeneration.Presentation.MapInfo
         {
             var vertices = new List<Vertex>();
 
-            foreach (var room in _rooms)
+            foreach (var room in _roomsBases)
             {
                 vertices.Add(
-                    new Vertex<RoomData>((Vector2)room.Bounds.position + ((Vector2)room.Bounds.size) / 2, room));
+                    new Vertex<Room>((Vector2)room.Bounds.position + ((Vector2)room.Bounds.size) / 2, room));
             }
 
             _delaunay = Delaunay2D.Triangulate(vertices);
@@ -131,8 +171,8 @@ namespace MapGeneration.Presentation.MapInfo
 
             foreach (var edge in _selectedEdges)
             {
-                var startRoom = (edge.U as Vertex<RoomData>).Item;
-                var endRoom = (edge.V as Vertex<RoomData>).Item;
+                var startRoom = (edge.U as Vertex<Room>).Item;
+                var endRoom = (edge.V as Vertex<Room>).Item;
 
                 var startPosf = startRoom.Bounds.center;
                 var endPosf = endRoom.Bounds.center;
@@ -203,7 +243,7 @@ namespace MapGeneration.Presentation.MapInfo
                 }
             }
 
-            foreach (var roomData in _rooms)
+            foreach (var roomData in _roomsBases)
             {
                 var width = roomData.Bounds.size.x;
                 var height = roomData.Bounds.size.y;

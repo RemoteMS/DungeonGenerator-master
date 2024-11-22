@@ -20,21 +20,12 @@ namespace MapGeneration.Presentation.MapInfo
             var floor = Object.Instantiate(GameResources.cube, cellObject.transform);
             floor.GetComponent<Transform>().localScale = new Vector3(1, 0.1f, 1);
             floor.GetComponent<MeshRenderer>().material = GameResources.Red;
+            floor.name = "Floor";
 
             Right.PlaceWall(nameof(Right), cellObject.transform, Vector3.right       * 0.5f);
             Left.PlaceWall(nameof(Left), cellObject.transform, Vector3.left          * 0.5f);
             Forward.PlaceWall(nameof(Forward), cellObject.transform, Vector3.forward * 0.5f);
             Backward.PlaceWall(nameof(Backward), cellObject.transform, Vector3.back  * 0.5f);
         }
-
-        private void PlaceWall(string name, Transform parent, Vector3 localOffset)
-        {
-            var wallObject = Object.Instantiate(GameResources.cube, parent);
-            wallObject.transform.localPosition = localOffset + new Vector3(0.5f, 0.5f, 0.5f);
-            wallObject.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-            wallObject.GetComponent<MeshRenderer>().material = GameResources.Green;
-            wallObject.name = name;
-        }
-
     }
 }

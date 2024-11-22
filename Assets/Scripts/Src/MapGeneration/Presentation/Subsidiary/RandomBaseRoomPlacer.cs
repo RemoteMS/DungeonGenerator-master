@@ -12,9 +12,9 @@ namespace MapGeneration.Presentation.Subsidiary
         {
         }
 
-        public override List<RoomData> PlaceRooms()
+        public override List<MapGenerator.Room> PlaceRooms()
         {
-            var rooms = new List<RoomData>();
+            var rooms = new List<MapGenerator.Room>();
 
             for (var i = 0; i < Settings.roomCount; i++)
             {
@@ -29,12 +29,12 @@ namespace MapGeneration.Presentation.Subsidiary
                 );
 
                 var add = true;
-                var newRoom = new RoomData(location,                         roomSize);
-                var buffer = new RoomData(location + new Vector2Int(-1, -1), roomSize + new Vector2Int(2, 2));
+                var newRoom = new MapGenerator.Room(location,                         roomSize);
+                var buffer = new MapGenerator.Room(location + new Vector2Int(-1, -1), roomSize + new Vector2Int(2, 2));
 
                 foreach (var room in rooms)
                 {
-                    if (RoomData.Intersect(room, buffer))
+                    if (MapInfo.MapGenerator.Room.Intersect(room, buffer))
                     {
                         add = false;
                         break;

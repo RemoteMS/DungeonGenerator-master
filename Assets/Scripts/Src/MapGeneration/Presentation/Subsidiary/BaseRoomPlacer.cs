@@ -6,8 +6,8 @@ namespace MapGeneration.Presentation.Subsidiary
 {
     public abstract class BaseRoomPlacer
     {
-        protected MapGeneratorSettings Settings;
-        protected IMapGenerator MapGenerator;
+        protected readonly MapGeneratorSettings Settings;
+        protected readonly IMapGenerator MapGenerator;
 
         protected BaseRoomPlacer(IMapGenerator mapGenerator, MapGeneratorSettings settings)
         {
@@ -15,6 +15,6 @@ namespace MapGeneration.Presentation.Subsidiary
             Settings = settings;
         }
 
-        public abstract List<RoomData> PlaceRooms();
+        public abstract List<MapGenerator.Room> PlaceRooms();
     }
 }
