@@ -244,7 +244,7 @@ public class Generator2D : MonoBehaviour
 
     private void PlaceHallwayLocally(Path path, int i = 0)
     {
-        var pathPos = path.GetMinPoint().ToVector3();
+        var pathPos = new Vector3Int();// = path.GetMinPoint().ToVector3();
 
         var p = new GameObject(path.ToString())
         {

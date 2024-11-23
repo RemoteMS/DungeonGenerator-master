@@ -39,10 +39,10 @@ namespace MapGeneration.Presentation.MapInfo
         private Grid2D<Cell> _cellGrid;
 
         private List<Path> _paths;
-        private List<Room> _roomsBases;
-
-        private List<RoomData> _rooms;
         private List<HallwayData> _hallways;
+
+        private List<Room> _roomsBases;
+        private List<RoomData> _rooms;
 
         private Delaunay2D _delaunay;
         private HashSet<Prim.Edge> _selectedEdges;
@@ -98,6 +98,15 @@ namespace MapGeneration.Presentation.MapInfo
 
         private void ConvertHallways()
         {
+            _hallways = new List<HallwayData>();
+
+            foreach (var path in _paths)
+            {
+                _hallways.Add(new HallwayData(path, _cellGrid, _grid));
+            }
+
+            _paths.Clear();
+            _paths = null;
         }
 
         private void PlaceRooms()
@@ -400,10 +409,9 @@ namespace MapGeneration.Presentation.MapInfo
 
         private void DrawHallways()
         {
-            foreach (var path in _paths)
+            foreach (var hallway in _hallways)
             {
-                path.DrawPath();
-                MapElementDrawer.DrawHallwayLocally(path, _grid);
+                MapElementDrawer.DrawHallwayLocally(hallway, _grid);
             }
         }
     }

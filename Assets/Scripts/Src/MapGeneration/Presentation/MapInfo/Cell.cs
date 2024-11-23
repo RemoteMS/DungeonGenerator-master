@@ -10,7 +10,7 @@ namespace MapGeneration.Presentation.MapInfo
         public Wall Backward { get; set; } = new EmptyWall();
 
 
-        public void Place(int localX, int localZ, Transform parent)
+        public void Place(int localX, int localZ, Transform parent, Material material = null)
         {
             var cellObject = new GameObject($"Cell_{localX}_{localZ}");
 
@@ -19,7 +19,9 @@ namespace MapGeneration.Presentation.MapInfo
 
             var floor = Object.Instantiate(GameResources.cube, cellObject.transform);
             floor.GetComponent<Transform>().localScale = new Vector3(1, 0.1f, 1);
-            floor.GetComponent<MeshRenderer>().material = GameResources.Red;
+
+            floor.GetComponent<MeshRenderer>().material = material == null ? GameResources.Red : material;
+
             floor.name = "Floor";
 
             Right.PlaceWall(nameof(Right), cellObject.transform, Vector3.right       * 0.5f);

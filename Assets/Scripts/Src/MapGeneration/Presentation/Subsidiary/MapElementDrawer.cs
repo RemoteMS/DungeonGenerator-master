@@ -23,30 +23,28 @@ namespace MapGeneration.Presentation.Subsidiary
             }
         }
 
-        public static void DrawHallwayLocally(Path path, Grid2D<CellType> grid, int i = 0)
+        public static void DrawHallwayLocally(HallwayData hallway, Grid2D<CellType> grid, int i = 0)
         {
-            var pathPos = path.GetMinPoint().ToVector3();
+            var hallwayPos = hallway.Bounds.min.ToVector3();
 
-            var p = new GameObject(path.ToString())
+            var hallwayGo = new GameObject($"Hallway_[{hallway.ToString()}]")
             {
                 transform =
                 {
-                    position = pathPos + new Vector3Int(0, i, 0)
+                    position = hallwayPos + new Vector3Int(0, i, 0)
                 }
             };
 
-            foreach (var point in path.Points)
+            for (var x = 0; x < hallway.Cells.GetLength(0); x++)
             {
-                if (grid[point] != CellType.Hallway) continue;
+                for (var y = 0; y < hallway.Cells.GetLength(1); y++)
+                {
+                    var cell = hallway.Cells[x, y];
 
-                var localPosition = new Vector3(point.x, 0, point.y) - pathPos;
+                    if (cell == null) continue;
 
-                GameObject go;
-                go = Object.Instantiate(GameResources.cube, p.transform);
-                go.transform.localPosition = localPosition;
-                go.transform.localScale = new Vector3(1, 1, 1);
-
-                go.GetComponent<MeshRenderer>().material = GameResources.Blue;
+                    cell.Place(x, y, hallwayGo.transform, GameResources.Blue);
+                }
             }
         }
 

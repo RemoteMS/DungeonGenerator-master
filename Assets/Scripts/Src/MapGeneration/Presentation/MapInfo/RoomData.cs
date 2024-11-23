@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MapGeneration.Presentation.MapInfo
 {
-    public class RoomData : IRoom
+    public class RoomData : IRoom, IPlaceable
     {
         public RectInt Bounds { get; }
         public Cell[,] Cells { get; private set; }
