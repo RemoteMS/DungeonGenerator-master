@@ -12,8 +12,8 @@ namespace MapGeneration.Presentation.MapInfo
 
         public void Place(int localX, int localZ, Transform parent, Material material = null)
         {
-            var x = localX * 10;
-            var z = localZ * 10;
+            var x = localX * 50;
+            var z = localZ * 50;
             var cellObject = new GameObject($"Cell_{x}_{z}");
 
             cellObject.transform.parent = parent;
@@ -22,7 +22,7 @@ namespace MapGeneration.Presentation.MapInfo
             var floor = Object.Instantiate(GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.Tile1,
                 cellObject.transform);
 
-            floor.GetComponent<MeshRenderer>().material = material == null ? GameResources.Red : material;
+            floor.GetComponent<MeshRenderer>().material = !material ? GameResources.Red : material;
 
             floor.name = "Floor";
 

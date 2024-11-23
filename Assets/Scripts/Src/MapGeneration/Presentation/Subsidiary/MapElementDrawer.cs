@@ -1,5 +1,4 @@
 using Helpers;
-using MapGeneration.Presentation.Enums;
 using MapGeneration.Presentation.MapInfo;
 using UnityEngine;
 
@@ -7,7 +6,7 @@ namespace MapGeneration.Presentation.Subsidiary
 {
     public class MapElementDrawer
     {
-        public static void DrawRoom(RoomData roomData, Transform mapObjectTransform)
+        public static void DrawRoomLocally(RoomData roomData, Transform mapObjectTransform)
         {
             var roomObject = new GameObject($"Room_{roomData.Bounds.position.x}_{roomData.Bounds.position.y}");
             roomObject.transform.position = roomData.Bounds.position.ToVector3();

@@ -16,7 +16,7 @@ namespace MapGeneration.Presentation.Subsidiary
 
             foreach (var roomData in mapData.Rooms)
             {
-                MapElementDrawer.DrawRoom(roomData, mapObject.transform);
+                MapElementDrawer.DrawRoomLocally(roomData, mapObject.transform);
             }
 
             return mapObject;
