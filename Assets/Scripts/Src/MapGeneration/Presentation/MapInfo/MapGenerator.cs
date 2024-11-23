@@ -72,6 +72,7 @@ namespace MapGeneration.Presentation.MapInfo
             ValidateAndSplitPaths();
             PlaceDoors();
             EnsureUniquePaths();
+            PlaceHallwaysWalls();
 
             ConvertRooms();
             ConvertHallways();
@@ -405,6 +406,52 @@ namespace MapGeneration.Presentation.MapInfo
             }
 
             _paths.RemoveAll(path => path.Points.All(pos => _grid[pos.x, pos.y] != CellType.Hallway));
+        }
+
+        private void PlaceHallwaysWalls()
+        {
+            foreach (var path in _paths)
+            {
+                foreach (var point in path.Points)
+                {
+                    var cell = _cellGrid[point];
+
+
+                    // todo: probably need add check on array edges
+
+                    if (_grid[point.x - 1, point.y] != CellType.Hallway)
+                    {
+                        if (cell.Left is EmptyWall)
+                        {
+                            cell.Left = new SimpleWall();
+                        }
+                    }
+
+                    if (_grid[point.x + 1, point.y] != CellType.Hallway)
+                    {
+                        if (cell.Right is EmptyWall)
+                        {
+                            cell.Right = new SimpleWall();
+                        }
+                    }
+
+                    if (_grid[point.x, point.y - 1] != CellType.Hallway)
+                    {
+                        if (cell.Backward is EmptyWall)
+                        {
+                            cell.Backward = new SimpleWall();
+                        }
+                    }
+
+                    if (_grid[point.x, point.y + 1] != CellType.Hallway)
+                    {
+                        if (cell.Forward is EmptyWall)
+                        {
+                            cell.Forward = new SimpleWall();
+                        }
+                    }
+                }
+            }
         }
 
         private void DrawHallways()
