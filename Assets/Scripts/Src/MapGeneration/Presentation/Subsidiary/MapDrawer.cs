@@ -1,20 +1,25 @@
 using MapGeneration.Presentation.MapInfo;
+using UnityEngine;
 
 namespace MapGeneration.Presentation.Subsidiary
 {
     public class MapDrawer : IMapDrawer
     {
-        public void Draw(MapData mapData)
+        public GameObject Draw(MapData mapData)
         {
+            var mapObject = new GameObject("mapObject");
+
             foreach (var hallway in mapData.Hallways)
             {
-                MapElementDrawer.DrawHallwayLocally(hallway);
+                MapElementDrawer.DrawHallwayLocally(hallway, mapObject.transform);
             }
 
             foreach (var roomData in mapData.Rooms)
             {
-                MapElementDrawer.DrawRoom(roomData);
+                MapElementDrawer.DrawRoom(roomData, mapObject.transform);
             }
+
+            return mapObject;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace MapGeneration.Presentation.Subsidiary
 {
     public class MapElementDrawer
     {
-        public static void DrawRoom(RoomData roomData)
+        public static void DrawRoom(RoomData roomData, Transform mapObjectTransform)
         {
             var roomObject = new GameObject($"Room_{roomData.Bounds.position.x}_{roomData.Bounds.position.y}");
             roomObject.transform.position = roomData.Bounds.position.ToVector3();
@@ -21,9 +21,11 @@ namespace MapGeneration.Presentation.Subsidiary
                     cell.Place(x, y, roomObject.transform);
                 }
             }
+
+            roomObject.transform.parent = mapObjectTransform;
         }
 
-        public static void DrawHallwayLocally(HallwayData hallway, int i = 0)
+        public static void DrawHallwayLocally(HallwayData hallway, Transform mapObjectTransform, int i = 0)
         {
             var hallwayPos = hallway.Bounds.min.ToVector3();
 
@@ -46,6 +48,8 @@ namespace MapGeneration.Presentation.Subsidiary
                     cell.Place(x, y, hallwayGo.transform, GameResources.Blue);
                 }
             }
+
+            hallwayGo.transform.parent = mapObjectTransform;
         }
 
         public void DrawElement()

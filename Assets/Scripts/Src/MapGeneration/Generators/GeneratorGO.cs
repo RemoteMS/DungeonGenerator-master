@@ -15,19 +15,37 @@ namespace MapGeneration.Generators
         private IMapGenerator _mapGenerator;
         private IMapDrawer _mapDrawer;
 
-        private void Awake()
-        {
-            if (randomGenerate)
-                mapGeneratorSettings.seed = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
-        }
+        private GameObject _map;
 
         private void Start()
         {
+            GenerateMap();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                Regenerate();
+            }
+        }
+
+        public void GenerateMap()
+        {
+            if (randomGenerate)
+                mapGeneratorSettings.seed = (int)DateTimeOffset.Now.ToUnixTimeSeconds();
+
             _mapGenerator = new MapGenerator(mapGeneratorSettings);
             var mapData = _mapGenerator.Generate();
 
             _mapDrawer = new MapDrawer();
-            _mapDrawer.Draw(mapData);
+            _map = _mapDrawer.Draw(mapData);
+        }
+
+        public void Regenerate()
+        {
+            DestroyImmediate(_map);
+            GenerateMap();
         }
     }
 }

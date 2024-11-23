@@ -1,9 +1,10 @@
 using MapGeneration.Presentation.MapInfo;
+using UnityEngine;
 
 namespace MapGeneration.Presentation
 {
     public interface IMapDrawer
     {
-        void Draw(MapData mapData);
+        GameObject Draw(MapData mapData);
     }
 }

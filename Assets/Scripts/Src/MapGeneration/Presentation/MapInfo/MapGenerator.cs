@@ -404,6 +404,7 @@ namespace MapGeneration.Presentation.MapInfo
                 {
                     var cell = _cellGrid[point];
 
+                    if (_grid[point] != CellType.Hallway) continue;
 
                     // todo: probably need add check on array edges
 
