@@ -12,13 +12,15 @@ namespace MapGeneration.Presentation.MapInfo
 
         public void Place(int localX, int localZ, Transform parent, Material material = null)
         {
-            var cellObject = new GameObject($"Cell_{localX}_{localZ}");
+            var x = localX * 10;
+            var z = localZ * 10;
+            var cellObject = new GameObject($"Cell_{x}_{z}");
 
             cellObject.transform.parent = parent;
-            cellObject.transform.localPosition = new Vector3(localX, 0, localZ);
+            cellObject.transform.localPosition = new Vector3(x, 0, z);
 
-            var floor = Object.Instantiate(GameResources.cube, cellObject.transform);
-            floor.GetComponent<Transform>().localScale = new Vector3(1, 0.1f, 1);
+            var floor = Object.Instantiate(GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.Tile1,
+                cellObject.transform);
 
             floor.GetComponent<MeshRenderer>().material = material == null ? GameResources.Red : material;
 
