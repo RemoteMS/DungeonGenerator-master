@@ -43,18 +43,18 @@ namespace MapGeneration.Presentation.MapInfo
 
             for (var x = 0; x < width; x++)
             {
-                if (Cells[x, 0].Backward is EmptyWall)
-                    Cells[x, 0].Backward = new SimpleWall();
-                if (Cells[x, height - 1].Forward is EmptyWall)
-                    Cells[x, height - 1].Forward = new SimpleWall();
+                if (Cells[x, 0].Backward == WallType.None)
+                    Cells[x, 0].Backward = WallType.Wall;
+                if (Cells[x, height - 1].Forward == WallType.None)
+                    Cells[x, height - 1].Forward = WallType.Wall;
             }
 
             for (var y = 0; y < height; y++)
             {
-                if (Cells[0, y].Left is EmptyWall)
-                    Cells[0, y].Left = new SimpleWall();
-                if (Cells[width - 1, y].Right is EmptyWall)
-                    Cells[width - 1, y].Right = new SimpleWall();
+                if (Cells[0, y].Left == WallType.None)
+                    Cells[0, y].Left = WallType.Wall;
+                if (Cells[width - 1, y].Right == WallType.None)
+                    Cells[width - 1, y].Right = WallType.Wall;
             }
         }
     }

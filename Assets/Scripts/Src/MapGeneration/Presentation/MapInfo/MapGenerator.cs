@@ -274,16 +274,16 @@ namespace MapGeneration.Presentation.MapInfo
                         switch (direction)
                         {
                             case Direction.Left:
-                                cell.Left = new Door();
+                                cell.Left = WallType.Door;
                                 break;
                             case Direction.Backward:
-                                cell.Backward = new Door();
+                                cell.Backward = WallType.Door;
                                 break;
                             case Direction.Right:
-                                cell.Right = new Door();
+                                cell.Right = WallType.Door;
                                 break;
                             case Direction.Forward:
-                                cell.Forward = new Door();
+                                cell.Forward = WallType.Door;
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -297,16 +297,16 @@ namespace MapGeneration.Presentation.MapInfo
                         switch (direction)
                         {
                             case Direction.Left:
-                                cell.Left = new Door();
+                                cell.Left = WallType.Door;
                                 break;
                             case Direction.Backward:
-                                cell.Backward = new Door();
+                                cell.Backward = WallType.Door;
                                 break;
                             case Direction.Right:
-                                cell.Right = new Door();
+                                cell.Right = WallType.Door;
                                 break;
                             case Direction.Forward:
-                                cell.Forward = new Door();
+                                cell.Forward = WallType.Door;
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -410,33 +410,33 @@ namespace MapGeneration.Presentation.MapInfo
 
                     if (_grid[point.x - 1, point.y] != CellType.Hallway)
                     {
-                        if (cell.Left is EmptyWall)
+                        if (cell.Left == WallType.None)
                         {
-                            cell.Left = new SimpleWall();
+                            cell.Left = WallType.Wall;
                         }
                     }
 
                     if (_grid[point.x + 1, point.y] != CellType.Hallway)
                     {
-                        if (cell.Right is EmptyWall)
+                        if (cell.Right == WallType.None)
                         {
-                            cell.Right = new SimpleWall();
+                            cell.Right = WallType.Wall;
                         }
                     }
 
                     if (_grid[point.x, point.y - 1] != CellType.Hallway)
                     {
-                        if (cell.Backward is EmptyWall)
+                        if (cell.Backward is WallType.None)
                         {
-                            cell.Backward = new SimpleWall();
+                            cell.Backward = WallType.Wall;
                         }
                     }
 
                     if (_grid[point.x, point.y + 1] != CellType.Hallway)
                     {
-                        if (cell.Forward is EmptyWall)
+                        if (cell.Forward == WallType.None)
                         {
-                            cell.Forward = new SimpleWall();
+                            cell.Forward = WallType.Wall;
                         }
                     }
                 }

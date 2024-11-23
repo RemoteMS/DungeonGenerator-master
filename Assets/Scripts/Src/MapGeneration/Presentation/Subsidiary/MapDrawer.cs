@@ -11,12 +11,12 @@ namespace MapGeneration.Presentation.Subsidiary
 
             foreach (var hallway in mapData.Hallways)
             {
-                MapElementDrawer.DrawHallwayLocally(hallway, mapObject.transform);
+                MapElementDrawer.DrawLocally(hallway, mapObject.transform);
             }
 
             foreach (var roomData in mapData.Rooms)
             {
-                MapElementDrawer.DrawRoomLocally(roomData, mapObject.transform);
+                MapElementDrawer.DrawLocally(roomData, mapObject.transform);
             }
 
             return mapObject;
