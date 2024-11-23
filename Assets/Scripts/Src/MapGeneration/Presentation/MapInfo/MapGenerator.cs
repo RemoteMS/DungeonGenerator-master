@@ -77,10 +77,7 @@ namespace MapGeneration.Presentation.MapInfo
             ConvertRooms();
             ConvertHallways();
 
-            DrawHallways();
-            DrawRooms();
-
-            var mapData = new MapData();
+            var mapData = new MapData(_rooms, _hallways);
             return mapData;
         }
 
@@ -126,15 +123,6 @@ namespace MapGeneration.Presentation.MapInfo
                 }
             }
         }
-
-        private void DrawRooms()
-        {
-            foreach (var roomData in _rooms)
-            {
-                MapElementDrawer.DrawRoom(roomData, roomData.Bounds.size);
-            }
-        }
-
 
         private void Triangulate()
         {
@@ -451,14 +439,6 @@ namespace MapGeneration.Presentation.MapInfo
                         }
                     }
                 }
-            }
-        }
-
-        private void DrawHallways()
-        {
-            foreach (var hallway in _hallways)
-            {
-                MapElementDrawer.DrawHallwayLocally(hallway, _grid);
             }
         }
     }

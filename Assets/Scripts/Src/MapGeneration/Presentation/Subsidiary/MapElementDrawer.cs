@@ -7,7 +7,7 @@ namespace MapGeneration.Presentation.Subsidiary
 {
     public class MapElementDrawer
     {
-        public static void DrawRoom(RoomData roomData, Vector2Int size)
+        public static void DrawRoom(RoomData roomData)
         {
             var roomObject = new GameObject($"Room_{roomData.Bounds.position.x}_{roomData.Bounds.position.y}");
             roomObject.transform.position = roomData.Bounds.position.ToVector3();
@@ -23,7 +23,7 @@ namespace MapGeneration.Presentation.Subsidiary
             }
         }
 
-        public static void DrawHallwayLocally(HallwayData hallway, Grid2D<CellType> grid, int i = 0)
+        public static void DrawHallwayLocally(HallwayData hallway, int i = 0)
         {
             var hallwayPos = hallway.Bounds.min.ToVector3();
 

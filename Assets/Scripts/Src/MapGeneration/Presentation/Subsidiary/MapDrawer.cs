@@ -6,6 +6,15 @@ namespace MapGeneration.Presentation.Subsidiary
     {
         public void Draw(MapData mapData)
         {
+            foreach (var hallway in mapData.Hallways)
+            {
+                MapElementDrawer.DrawHallwayLocally(hallway);
+            }
+
+            foreach (var roomData in mapData.Rooms)
+            {
+                MapElementDrawer.DrawRoom(roomData);
+            }
         }
     }
 }

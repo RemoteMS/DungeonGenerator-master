@@ -4,7 +4,13 @@ namespace MapGeneration.Presentation.MapInfo
 {
     public class MapData : IMap
     {
-        private List<RoomData> _rooms;
-        private List<HallwayData> _corridors;
+        public List<RoomData> Rooms { get; }
+        public List<HallwayData> Hallways { get; }
+
+        public MapData(List<RoomData> rooms, List<HallwayData> hallways)
+        {
+            Rooms = rooms;
+            Hallways = hallways;
+        }
     }
 }
