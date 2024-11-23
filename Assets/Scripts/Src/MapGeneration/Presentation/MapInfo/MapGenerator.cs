@@ -7,6 +7,7 @@ using MapGeneration.Helpers;
 using MapGeneration.Presentation.Enums;
 using MapGeneration.Presentation.Subsidiary;
 using MapGeneration.Settings;
+using NUnit.Framework;
 using UnityEngine;
 using Random = System.Random;
 
@@ -407,8 +408,12 @@ namespace MapGeneration.Presentation.MapInfo
                     if (_grid[point] != CellType.Hallway) continue;
 
                     // todo: probably need add check on array edges
+                    // todo: refactor later
 
-                    if (_grid[point.x - 1, point.y] != CellType.Hallway)
+                    if (
+                        _grid[point.x    - 1, point.y] != CellType.Hallway
+                        && _grid[point.x - 1, point.y] != CellType.Room
+                    )
                     {
                         if (cell.Left == WallType.None)
                         {
@@ -416,7 +421,10 @@ namespace MapGeneration.Presentation.MapInfo
                         }
                     }
 
-                    if (_grid[point.x + 1, point.y] != CellType.Hallway)
+                    if (
+                        _grid[point.x    + 1, point.y] != CellType.Hallway
+                        && _grid[point.x + 1, point.y] != CellType.Room
+                    )
                     {
                         if (cell.Right == WallType.None)
                         {
@@ -424,7 +432,10 @@ namespace MapGeneration.Presentation.MapInfo
                         }
                     }
 
-                    if (_grid[point.x, point.y - 1] != CellType.Hallway)
+                    if (
+                        _grid[point.x, point.y    - 1] != CellType.Hallway
+                        && _grid[point.x, point.y - 1] != CellType.Room
+                    )
                     {
                         if (cell.Backward is WallType.None)
                         {
@@ -432,7 +443,10 @@ namespace MapGeneration.Presentation.MapInfo
                         }
                     }
 
-                    if (_grid[point.x, point.y + 1] != CellType.Hallway)
+                    if (
+                        _grid[point.x, point.y    + 1] != CellType.Hallway
+                        && _grid[point.x, point.y + 1] != CellType.Room
+                    )
                     {
                         if (cell.Forward == WallType.None)
                         {

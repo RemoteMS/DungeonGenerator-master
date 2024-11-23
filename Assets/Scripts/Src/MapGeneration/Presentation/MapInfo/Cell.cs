@@ -23,6 +23,22 @@ namespace MapGeneration.Presentation.MapInfo
             cellObject.transform.localPosition = new Vector3(x, 0, z);
 
             InstantiateFloor(cellObject.transform);
+
+            if (Right != WallType.None)
+                PlaceWall(cellObject.transform, Vector3.right + new Vector3(0, 0, 0.5f), Quaternion.Euler(0, 180, 0),
+                    Right);
+
+            if (Left != WallType.None)
+                PlaceWall(cellObject.transform, Vector3.zero + new Vector3(0, 0, 0.5f) /*Vector3.left*/,
+                    Quaternion.Euler(0, 0, 0),  Left);
+
+            if (Forward != WallType.None)
+                PlaceWall(cellObject.transform, Vector3.forward + new Vector3(0.5f, 0, 0), Quaternion.Euler(0, 90, 0),
+                    Forward);
+
+            if (Backward != WallType.None)
+                PlaceWall(cellObject.transform,  Vector3.zero + new Vector3(0.5f, 0, 0) /* Vector3.back*/,
+                    Quaternion.Euler(0, -90, 0), Backward);
         }
 
         private void InstantiateFloor(Transform parent, Material material = null)
@@ -36,61 +52,32 @@ namespace MapGeneration.Presentation.MapInfo
             floor.name = "Floor";
         }
 
-        public Transform Place(Vector3 basePosition, float instanceScale = 1.0f, float positionScale = 1.0f)
+        private void PlaceWall(Transform parent, Vector3 position, Quaternion rotation, WallType wallType)
         {
-            var finalPosition = basePosition * positionScale;
-
-            var cellObject = new GameObject("Cell");
-            cellObject.transform.position = finalPosition;
-
-            var floor = Object.Instantiate(GameResources.cube, cellObject.transform);
-            floor.transform.localScale = new Vector3(instanceScale, 0.1f * instanceScale, instanceScale);
-            floor.GetComponent<MeshRenderer>().material = GameResources.Red;
-
-            if (Right != WallType.None)
-                PlaceWall(cellObject.transform, Vector3.right * (instanceScale / 2), Quaternion.Euler(0, 90, 0), Right,
-                    instanceScale);
-
-            if (Left != WallType.None)
-                PlaceWall(cellObject.transform, Vector3.left * (instanceScale / 2), Quaternion.Euler(0, 90, 0), Left,
-                    instanceScale);
-
-            if (Forward != WallType.None)
-                PlaceWall(cellObject.transform, Vector3.forward * (instanceScale / 2), Quaternion.identity, Forward,
-                    instanceScale);
-
-            if (Backward != WallType.None)
-                PlaceWall(cellObject.transform, Vector3.back * (instanceScale / 2), Quaternion.identity, Backward,
-                    instanceScale);
-
-            return cellObject.transform;
-        }
-
-        private void PlaceWall(Transform parent, Vector3 position, Quaternion rotation, WallType wallType,
-            float instanceScale)
-        {
-            var wall = Object.Instantiate(GameResources.cube, parent);
-            wall.transform.localPosition = position;
-            wall.transform.localRotation = rotation;
-
-            wall.transform.localScale = new Vector3(0.1f * instanceScale, instanceScale, instanceScale);
+            GameObject wall;
 
             switch (wallType)
             {
                 case WallType.Wall:
+                    wall = Object.Instantiate(
+                        GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.Wall_1,
+                        parent
+                    );
                     wall.GetComponent<MeshRenderer>().material = GameResources.Green; // Стена
                     break;
                 case WallType.Door:
+                    wall = Object.Instantiate(
+                        GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.Door_1,
+                        parent
+                    );
                     wall.GetComponent<MeshRenderer>().material = GameResources.Blue; // Дверь
-                    wall.transform.localScale =
-                        new Vector3(0.1f * instanceScale, instanceScale / 2, instanceScale / 2); // Размер двери
-                    break;
-                case WallType.None:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(wallType), wallType, null);
             }
 
+            wall.transform.localPosition = position;
+            wall.transform.localRotation = rotation;
             wall.name = wallType.ToString();
         }
     }
