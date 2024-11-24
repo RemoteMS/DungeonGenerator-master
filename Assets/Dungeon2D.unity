@@ -723,15 +723,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1791564054}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fee945360a9247deafca0b0254372231, type: 3}
+  m_Script: {fileID: 11500000, guid: e0218ce66a8484f68aa7343a842d5ed7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   randomGenerate: 1
   mapGeneratorSettings:
-    seed: 1732404886
+    seed: 0
     size: {x: 40, y: 40}
-    roomCount: 100
-    roomMinSize: {x: 3, y: 2}
+    roomCount: 111
+    roomMinSize: {x: 3, y: 3}
     roomMaxSize: {x: 7, y: 7}
 --- !u!4 &1791564056
 Transform:
