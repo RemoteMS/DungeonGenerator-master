@@ -26,7 +26,7 @@ namespace MapGeneration.Presentation.Subsidiary
                 {
                     var cell = placeable.Cells[x, y];
 
-                    cell?.Place(x * cellSize, y * cellSize, placeableGo.transform, GameResources.Blue);
+                    cell?.Place(x, y, placeableGo.transform, cellSize: cellSize);
                 }
             }
 

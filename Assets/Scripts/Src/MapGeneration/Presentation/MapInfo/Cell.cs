@@ -12,51 +12,70 @@ namespace MapGeneration.Presentation.MapInfo
         public WallType Backward { get; set; } = WallType.None;
 
 
-        public void Place(float localX, float localZ, Transform parent, Material material = null)
+        public void Place(float localX, float localZ, Transform parent, Material material = null, float cellSize = 1)
         {
-            var x = localX;
-            var z = localZ;
+            var x = localX * cellSize;
+            var z = localZ * cellSize;
 
-            var cellObject = new GameObject($"Cell_{x}_{z}");
+            var cellObject = new GameObject($"Cell_{localX}_{localZ}, {x}_{z}");
 
             cellObject.transform.parent = parent;
             cellObject.transform.localPosition = new Vector3(x, 0, z);
 
-            InstantiateFloor(cellObject.transform);
+            InstantiateFloor(cellObject.transform, cellSize: cellSize);
 
             if (Right != WallType.None)
-                PlaceWall(cellObject.transform, Vector3.right + new Vector3(0, 0, 0.5f), Quaternion.Euler(0, 180, 0),
-                    Right);
+                PlaceWall(
+                    cellObject.transform,
+                    (Vector3.right + new Vector3(0, 0, 0.5f)) * cellSize,
+                    Quaternion.Euler(0, 180, 0),
+                    Right,
+                    nameof(Right)
+                );
 
             if (Left != WallType.None)
-                PlaceWall(cellObject.transform, Vector3.zero + new Vector3(0, 0, 0.5f) /*Vector3.left*/,
-                    Quaternion.Euler(0, 0, 0),  Left);
+                PlaceWall(
+                    cellObject.transform,
+                    (Vector3.zero + new Vector3(0, 0, 0.5f)) * cellSize,
+                    Quaternion.Euler(0, 0, 0),
+                    Left,
+                    nameof(Left)
+                );
 
             if (Forward != WallType.None)
-                PlaceWall(cellObject.transform, Vector3.forward + new Vector3(0.5f, 0, 0), Quaternion.Euler(0, 90, 0),
-                    Forward);
+                PlaceWall(cellObject.transform,
+                    (Vector3.forward + new Vector3(0.5f, 0, 0)) * cellSize,
+                    Quaternion.Euler(0, 90, 0),
+                    Forward,
+                    nameof(Forward)
+                );
 
             if (Backward != WallType.None)
-                PlaceWall(cellObject.transform,  Vector3.zero + new Vector3(0.5f, 0, 0) /* Vector3.back*/,
-                    Quaternion.Euler(0, -90, 0), Backward);
+                PlaceWall(
+                    cellObject.transform,
+                    (Vector3.zero + new Vector3(0.5f, 0, 0)) * cellSize,
+                    Quaternion.Euler(0, -90, 0),
+                    Backward,
+                    nameof(Backward)
+                );
 
             cellObject.isStatic = true;
         }
 
-        private void InstantiateFloor(Transform parent, Material material = null)
+        private void InstantiateFloor(Transform parent, Material material = null, float cellSize = 1f)
         {
-            var floor = Object.Instantiate(GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.PlaneFloor,
-                parent
+            var floor = Object.Instantiate(GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.PlaneFloor_1,
+                parent,
+                false
             );
 
             floor.isStatic = true;
-
-            floor.GetComponent<MeshRenderer>().material = !material ? GameResources.Red : material;
+            floor.transform.localPosition += new Vector3(cellSize / 2, 0, cellSize / 2);
 
             floor.name = "Floor";
         }
 
-        private void PlaceWall(Transform parent, Vector3 position, Quaternion rotation, WallType wallType)
+        private void PlaceWall(Transform parent, Vector3 position, Quaternion rotation, WallType wallType, string name)
         {
             GameObject wall;
 
@@ -64,17 +83,15 @@ namespace MapGeneration.Presentation.MapInfo
             {
                 case WallType.Wall:
                     wall = Object.Instantiate(
-                        GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.Wall_1,
+                        GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.Wall,
                         parent
                     );
-                    wall.GetComponent<MeshRenderer>().material = GameResources.Green; // Стена
                     break;
                 case WallType.Door:
                     wall = Object.Instantiate(
-                        GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.Door_1,
+                        GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.Door,
                         parent
                     );
-                    wall.GetComponent<MeshRenderer>().material = GameResources.Blue; // Дверь
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(wallType), wallType, null);
@@ -82,7 +99,7 @@ namespace MapGeneration.Presentation.MapInfo
 
             wall.transform.localPosition = position;
             wall.transform.localRotation = rotation;
-            wall.name = wallType.ToString();
+            wall.name = name;
             wall.isStatic = true;
         }
     }
