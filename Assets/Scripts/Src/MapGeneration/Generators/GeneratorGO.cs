@@ -3,6 +3,7 @@ using MapGeneration.Presentation;
 using MapGeneration.Presentation.MapInfo;
 using MapGeneration.Presentation.Subsidiary;
 using MapGeneration.Settings;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 namespace MapGeneration.Generators
@@ -11,6 +12,11 @@ namespace MapGeneration.Generators
     {
         [SerializeField] private bool randomGenerate;
         [SerializeField] private MapGeneratorSettings mapGeneratorSettings;
+
+        [SerializeField] private float initialCellSize = 1;
+        [SerializeField] private float cellSizeMultiplayer = 1;
+
+        [SerializeField] private NavMeshSurface navMesh;
 
         private IMapGenerator _mapGenerator;
         private IMapDrawer _mapDrawer;
@@ -38,8 +44,9 @@ namespace MapGeneration.Generators
             _mapGenerator = new MapGenerator(mapGeneratorSettings);
             var mapData = _mapGenerator.Generate();
 
-            _mapDrawer = new MapDrawer();
+            _mapDrawer = new MapDrawer(initialCellSize);
             _map = _mapDrawer.Draw(mapData);
+            // navMesh.BuildNavMesh();
         }
 
         public void Regenerate()

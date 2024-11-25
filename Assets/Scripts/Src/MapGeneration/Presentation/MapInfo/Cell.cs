@@ -12,7 +12,7 @@ namespace MapGeneration.Presentation.MapInfo
         public WallType Backward { get; set; } = WallType.None;
 
 
-        public void Place(int localX, int localZ, Transform parent, Material material = null)
+        public void Place(float localX, float localZ, Transform parent, Material material = null)
         {
             var x = localX;
             var z = localZ;
@@ -39,6 +39,8 @@ namespace MapGeneration.Presentation.MapInfo
             if (Backward != WallType.None)
                 PlaceWall(cellObject.transform,  Vector3.zero + new Vector3(0.5f, 0, 0) /* Vector3.back*/,
                     Quaternion.Euler(0, -90, 0), Backward);
+
+            cellObject.isStatic = true;
         }
 
         private void InstantiateFloor(Transform parent, Material material = null)
@@ -46,6 +48,8 @@ namespace MapGeneration.Presentation.MapInfo
             var floor = Object.Instantiate(GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.PlaneFloor,
                 parent
             );
+
+            floor.isStatic = true;
 
             floor.GetComponent<MeshRenderer>().material = !material ? GameResources.Red : material;
 
@@ -79,6 +83,7 @@ namespace MapGeneration.Presentation.MapInfo
             wall.transform.localPosition = position;
             wall.transform.localRotation = rotation;
             wall.name = wallType.ToString();
+            wall.isStatic = true;
         }
     }
 }

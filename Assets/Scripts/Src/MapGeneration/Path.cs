@@ -47,7 +47,6 @@ namespace MapGeneration
                 if (point.y > maxY) maxY = point.y;
             }
 
-            Debug.Log($"minX - {minX}, minY - {minY}, with - {maxX - minX}, height - {maxY - minY}");
             // todo: check adding "+1" to width and height
             return new RectInt(minX, minY, (maxX - minX) + 1, (maxY - minY) + 1);
         }

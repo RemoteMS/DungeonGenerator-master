@@ -6,7 +6,8 @@ namespace MapGeneration.Presentation.Subsidiary
 {
     public class MapElementDrawer
     {
-        public static void DrawLocally(IPlaceable placeable, Transform mapObjectTransform, int i = 0)
+        public static void DrawLocally(IPlaceable placeable, Transform mapObjectTransform, int i = 0,
+            float cellSize = 1f)
         {
             var placeablePos = placeable.Bounds.min.ToVector3();
 
@@ -14,7 +15,8 @@ namespace MapGeneration.Presentation.Subsidiary
             {
                 transform =
                 {
-                    position = placeablePos + new Vector3Int(0, i, 0)
+                    position = new Vector3(placeablePos.x * cellSize, placeablePos.y, placeablePos.z * cellSize) +
+                               new Vector3Int(0, i, 0)
                 }
             };
 
@@ -24,11 +26,12 @@ namespace MapGeneration.Presentation.Subsidiary
                 {
                     var cell = placeable.Cells[x, y];
 
-                    cell?.Place(x, y, placeableGo.transform, GameResources.Blue);
+                    cell?.Place(x * cellSize, y * cellSize, placeableGo.transform, GameResources.Blue);
                 }
             }
 
             placeableGo.transform.parent = mapObjectTransform;
+            placeableGo.isStatic = true;
         }
     }
 }
