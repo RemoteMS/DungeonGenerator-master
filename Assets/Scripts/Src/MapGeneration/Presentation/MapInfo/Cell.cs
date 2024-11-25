@@ -27,7 +27,7 @@ namespace MapGeneration.Presentation.MapInfo
             if (Right != WallType.None)
                 PlaceWall(
                     cellObject.transform,
-                    (Vector3.right + new Vector3(0, 0, 0.5f)) * cellSize,
+                    (Vector3.right + Vector3.forward) * cellSize,
                     Quaternion.Euler(0, 180, 0),
                     Right,
                     nameof(Right)
@@ -36,7 +36,7 @@ namespace MapGeneration.Presentation.MapInfo
             if (Left != WallType.None)
                 PlaceWall(
                     cellObject.transform,
-                    (Vector3.zero + new Vector3(0, 0, 0.5f)) * cellSize,
+                    Vector3.zero * cellSize,
                     Quaternion.Euler(0, 0, 0),
                     Left,
                     nameof(Left)
@@ -44,7 +44,7 @@ namespace MapGeneration.Presentation.MapInfo
 
             if (Forward != WallType.None)
                 PlaceWall(cellObject.transform,
-                    (Vector3.forward + new Vector3(0.5f, 0, 0)) * cellSize,
+                    Vector3.forward * cellSize,
                     Quaternion.Euler(0, 90, 0),
                     Forward,
                     nameof(Forward)
@@ -53,7 +53,7 @@ namespace MapGeneration.Presentation.MapInfo
             if (Backward != WallType.None)
                 PlaceWall(
                     cellObject.transform,
-                    (Vector3.zero + new Vector3(0.5f, 0, 0)) * cellSize,
+                    Vector3.right * cellSize,
                     Quaternion.Euler(0, -90, 0),
                     Backward,
                     nameof(Backward)
@@ -64,13 +64,14 @@ namespace MapGeneration.Presentation.MapInfo
 
         private void InstantiateFloor(Transform parent, Material material = null, float cellSize = 1f)
         {
-            var floor = Object.Instantiate(GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.PlaneFloor_1,
+            var floor = Object.Instantiate(
+                GameResources.Prefabs.FloorContainer,
                 parent,
                 false
             );
 
             floor.isStatic = true;
-            floor.transform.localPosition += new Vector3(cellSize / 2, 0, cellSize / 2);
+            // floor.transform.localPosition += new Vector3(cellSize / 2, 0, cellSize / 2);
 
             floor.name = "Floor";
         }
@@ -83,13 +84,13 @@ namespace MapGeneration.Presentation.MapInfo
             {
                 case WallType.Wall:
                     wall = Object.Instantiate(
-                        GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.Wall,
+                        GameResources.Prefabs.WallContainer,
                         parent
                     );
                     break;
                 case WallType.Door:
                     wall = Object.Instantiate(
-                        GameResources.Src.Dungeon.modular_dungeon_kit.Prefabs.Door,
+                        GameResources.Prefabs.DoorContainer,
                         parent
                     );
                     break;
