@@ -46,7 +46,7 @@ namespace MapGeneration.Generators
 
             _mapDrawer = new MapDrawer(initialCellSize);
             _map = _mapDrawer.Draw(mapData);
-            // navMesh.BuildNavMesh();
+            navMesh.BuildNavMesh();
         }
 
         public void Regenerate()

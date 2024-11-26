@@ -557,7 +557,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SerializedVersion: 0
   m_AgentTypeID: 0
-  m_CollectObjects: 0
+  m_CollectObjects: 3
   m_Size: {x: 10, y: 10, z: 10}
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
@@ -573,7 +573,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: aa793aa6df7a149559c90d865fb625de, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &788165332
 Transform:
@@ -1105,6 +1105,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 5026170387747694966, guid: be8da89fd2c7045989f5b5175937015f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1173,6 +1178,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WallContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 2629118616885608733, guid: 003858b68290c487798adb6c7c8affca,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1240,6 +1250,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FloorContainer
+      objectReference: {fileID: 0}
+    - target: {fileID: 7713183880370432178, guid: 6ef80cf322e8c4b9b813ec67a529a729,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
