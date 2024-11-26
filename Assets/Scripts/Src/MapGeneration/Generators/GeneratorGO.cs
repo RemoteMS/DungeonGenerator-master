@@ -58,7 +58,6 @@ namespace MapGeneration.Generators
         private void OnDestroy()
         {
             navMesh.RemoveData();
-            Debug.Log("navMesh");
         }
     }
 }

@@ -1,22 +1,25 @@
+using System;
 using MapGeneration.Presentation.Enums;
 using UnityEngine;
 
 namespace MapGeneration.Presentation.MapInfo
 {
-    public class HallwayData : IHallway, IPlaceable
+    public class HallwayData : IHallway, IPlaceable, IEquatable<HallwayData>
     {
+        public int Id { get; }
         public RectInt Bounds { get; }
 
         private Vector3Int _hallwayPosition;
         public Cell[,] Cells { get; private set; }
         private readonly Vector2Int[] _globalPoints;
 
-        public HallwayData(Path path, Grid2D<Cell> cells, Grid2D<CellType> grid)
+        public HallwayData(int id, Path path, Grid2D<Cell> cells, Grid2D<CellType> grid)
         {
+            Id = id;
             Bounds = path.GetBounds();
 
             _globalPoints = new Vector2Int[path.Points.Count];
-            for (int i = 0; i < path.Points.Count; i++)
+            for (var i = 0; i < path.Points.Count; i++)
             {
                 _globalPoints[i] = path.Points[i];
             }
@@ -60,6 +63,30 @@ namespace MapGeneration.Presentation.MapInfo
         public override string ToString()
         {
             return _name;
+        }
+
+        public bool Equals(HallwayData other)
+        {
+            if (other is null) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Id == other.Id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((HallwayData)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id;
+        }
+
+        public string GetPlaceableType()
+        {
+            return nameof(HallwayData);
         }
     }
 }

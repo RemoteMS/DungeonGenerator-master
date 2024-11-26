@@ -7,7 +7,6 @@ using MapGeneration.Helpers;
 using MapGeneration.Presentation.Enums;
 using MapGeneration.Presentation.Subsidiary;
 using MapGeneration.Settings;
-using NUnit.Framework;
 using UnityEngine;
 using Random = System.Random;
 
@@ -86,9 +85,10 @@ namespace MapGeneration.Presentation.MapInfo
         {
             _rooms = new List<RoomData>();
 
+            var id = 0;
             foreach (var room in _roomsBases)
             {
-                _rooms.Add(new RoomData(room.Bounds, _cellGrid));
+                _rooms.Add(new RoomData(id++, room.Bounds, _cellGrid));
             }
 
             _roomsBases.Clear();
@@ -99,9 +99,10 @@ namespace MapGeneration.Presentation.MapInfo
         {
             _hallways = new List<HallwayData>();
 
+            var id = 0;
             foreach (var path in _paths)
             {
-                _hallways.Add(new HallwayData(path, _cellGrid, _grid));
+                _hallways.Add(new HallwayData(id++, path, _cellGrid, _grid));
             }
 
             _paths.Clear();

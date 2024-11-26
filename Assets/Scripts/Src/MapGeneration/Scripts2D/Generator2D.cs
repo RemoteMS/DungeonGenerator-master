@@ -6,7 +6,6 @@ using Graphs;
 using Helpers;
 using MapGeneration;
 using MapGeneration.Presentation.Enums;
-using MapGeneration.Presentation.MapInfo;
 
 public class Generator2D : MonoBehaviour
 {

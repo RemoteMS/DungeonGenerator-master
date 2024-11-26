@@ -1,23 +1,28 @@
+using System;
 using Helpers;
 using UnityEngine;
 
 namespace MapGeneration.Presentation.MapInfo
 {
-    public class RoomData : IRoom, IPlaceable
+    public class RoomData : IRoom, IPlaceable, IEquatable<RoomData>
     {
+        public int Id { get; }
         public RectInt Bounds { get; }
         public Cell[,] Cells { get; private set; }
 
         private Vector3Int _position;
         private Vector3Int _size;
 
-        public RoomData(RectInt bounds, Grid2D<Cell> cells)
+        public RoomData(int id, RectInt bounds, Grid2D<Cell> cells)
         {
+            Id = id;
             Bounds = bounds;
             _position = bounds.position.ToVector3();
 
             CopyCells(cells);
             AddBoundaryWalls();
+
+            _name = $"pos_{Bounds.position}_size_{Bounds.size}";
         }
 
         private void CopyCells(Grid2D<Cell> cells)
@@ -56,6 +61,37 @@ namespace MapGeneration.Presentation.MapInfo
                 if (Cells[width - 1, y].Right == WallType.None)
                     Cells[width - 1, y].Right = WallType.Wall;
             }
+        }
+
+        private readonly string _name;
+
+        public override string ToString()
+        {
+            return _name;
+        }
+
+        public bool Equals(RoomData other)
+        {
+            if (other is null) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Id == other.Id;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((RoomData)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return Id;
+        }
+
+        public string GetPlaceableType()
+        {
+            return nameof(RoomData);
         }
     }
 }

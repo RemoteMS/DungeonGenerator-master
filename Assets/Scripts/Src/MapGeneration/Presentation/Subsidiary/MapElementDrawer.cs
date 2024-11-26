@@ -1,5 +1,4 @@
 using Helpers;
-using MapGeneration.Presentation.MapInfo;
 using UnityEngine;
 
 namespace MapGeneration.Presentation.Subsidiary
@@ -11,7 +10,7 @@ namespace MapGeneration.Presentation.Subsidiary
         {
             var placeablePos = placeable.Bounds.min.ToVector3();
 
-            var placeableGo = new GameObject($"{placeable.GetType()}_[{placeable}]")
+            var placeableGo = new GameObject($"ID_{placeable.Id}_{placeable.GetPlaceableType()}_[{placeable}]")
             {
                 transform =
                 {
