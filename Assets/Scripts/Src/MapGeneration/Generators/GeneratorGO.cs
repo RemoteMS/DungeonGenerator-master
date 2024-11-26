@@ -54,5 +54,11 @@ namespace MapGeneration.Generators
             DestroyImmediate(_map);
             GenerateMap();
         }
+
+        private void OnDestroy()
+        {
+            navMesh.RemoveData();
+            Debug.Log("navMesh");
+        }
     }
 }
