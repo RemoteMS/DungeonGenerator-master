@@ -208,13 +208,13 @@ public class Generator2D : MonoBehaviour
 
                         var delta = current - prev;
 
-                        Debug.DrawLine(prev.ToVector3() + new Vector3(0.5f, 0.5f, 0.5f),
-                            current.ToVector3()         + new Vector3(0.5f, 0.5f, 0.5f),
+                        Debug.DrawLine(prev.ToVector3Int() + new Vector3(0.5f, 0.5f, 0.5f),
+                            current.ToVector3Int()         + new Vector3(0.5f, 0.5f, 0.5f),
                             Color.magenta, 100, false);
                     }
                 }
 
-                paths.Add(new Path(path));
+                // paths.Add(new Path(path));
             }
         }
 
@@ -227,7 +227,7 @@ public class Generator2D : MonoBehaviour
         int iss = 0;
         foreach (var path in paths)
         {
-            path.DrawPath(iss);
+            // path.DrawPath(iss);
             PlaceHallwayLocally(path, iss++);
 
             if (iss == 10)
@@ -243,7 +243,7 @@ public class Generator2D : MonoBehaviour
 
     private void PlaceHallwayLocally(Path path, int i = 0)
     {
-        var pathPos = new Vector3Int();// = path.GetMinPoint().ToVector3();
+        var pathPos = new Vector3Int();// = path.GetMinPoint().ToVector3Int();
 
         var p = new GameObject(path.ToString())
         {

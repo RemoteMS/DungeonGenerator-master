@@ -1,16 +1,21 @@
 using System.Collections.Generic;
-using Helpers;
+using MapGeneration.Presentation.MapInfo;
 using UnityEngine;
 
 namespace MapGeneration
 {
     public class Path
     {
+        public MapGenerator.Room From { get; }
+        public MapGenerator.Room To { get; }
+
         public List<Vector2Int> Points { get; }
 
-        public Path(List<Vector2Int> points)
+        public Path(List<Vector2Int> points, MapGenerator.Room from, MapGenerator.Room to)
         {
             Points = points;
+            From = from;
+            To = to;
         }
 
         public void Merge(Path other)
@@ -19,14 +24,6 @@ namespace MapGeneration
             {
                 if (!Points.Contains(point))
                     Points.Add(point);
-            }
-        }
-
-        public void DrawPath(int y = 0)
-        {
-            for (var i = 0; i < Points.Count - 2; i++)
-            {
-                Debug.DrawLine(Points[i].ToVector3(y), Points[i + 1].ToVector3(y), Color.yellow, 100f);
             }
         }
 

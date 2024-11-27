@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Graphs;
-using Helpers;
 using MapGeneration.Helpers;
 using MapGeneration.Presentation.Enums;
 using MapGeneration.Presentation.Subsidiary;
@@ -39,10 +38,10 @@ namespace MapGeneration.Presentation.MapInfo
         private Grid2D<Cell> _cellGrid;
 
         private List<Path> _paths;
-        private List<HallwayData> _hallways;
+        private HallwayData[] _hallways;
 
         private List<Room> _roomsBases;
-        private List<RoomData> _rooms;
+        private RoomData[] _rooms;
 
         private Delaunay2D _delaunay;
         private HashSet<Prim.Edge> _selectedEdges;
@@ -83,12 +82,11 @@ namespace MapGeneration.Presentation.MapInfo
 
         private void ConvertRooms()
         {
-            _rooms = new List<RoomData>();
+            _rooms = new RoomData[_roomsBases.Count];
 
-            var id = 0;
-            foreach (var room in _roomsBases)
+            for (var index = 0; index < _roomsBases.Count; index++)
             {
-                _rooms.Add(new RoomData(id++, room.Bounds, _cellGrid));
+                _rooms[index] = new RoomData(index, _roomsBases[index].Bounds, _cellGrid);
             }
 
             _roomsBases.Clear();
@@ -97,12 +95,11 @@ namespace MapGeneration.Presentation.MapInfo
 
         private void ConvertHallways()
         {
-            _hallways = new List<HallwayData>();
+            _hallways = new HallwayData[_paths.Count];
 
-            var id = 0;
-            foreach (var path in _paths)
+            for (var index = 0; index < _paths.Count; index++)
             {
-                _hallways.Add(new HallwayData(id++, path, _cellGrid, _grid));
+                _hallways[index] = new HallwayData(index, _paths[index], _cellGrid, _grid);
             }
 
             _paths.Clear();
@@ -179,7 +176,7 @@ namespace MapGeneration.Presentation.MapInfo
                 var startPos = new Vector2Int((int)startPosf.x, (int)startPosf.y);
                 var endPos = new Vector2Int((int)endPosf.x,     (int)endPosf.y);
 
-                var path = aStar.FindPath(startPos, endPos, (DungeonPathfinder2D.Node a, DungeonPathfinder2D.Node b) =>
+                var path = aStar.FindPath(startPos, endPos, (a, b) =>
                 {
                     var pathCost = new DungeonPathfinder2D.PathCost();
 
@@ -219,14 +216,10 @@ namespace MapGeneration.Presentation.MapInfo
                             var prev = path[i - 1];
 
                             var delta = current - prev;
-
-                            Debug.DrawLine(prev.ToVector3() + new Vector3(0.5f, 0.5f, 0.5f),
-                                current.ToVector3()         + new Vector3(0.5f, 0.5f, 0.5f),
-                                Color.magenta, 100, false);
                         }
                     }
 
-                    paths.Add(new Path(path));
+                    paths.Add(new Path(path, startRoom, endRoom));
                 }
             }
 
@@ -336,6 +329,7 @@ namespace MapGeneration.Presentation.MapInfo
             {
                 var points = path.Points;
                 var currentPathPoints = new List<Vector2Int>();
+                var currentFromRoom = path.From;
                 var isNewPath = true;
 
                 foreach (var point in points)
@@ -344,17 +338,23 @@ namespace MapGeneration.Presentation.MapInfo
 
                     if (cellType == CellType.Room)
                     {
+                        var room = FindRoomContainingPoint(point);
+
                         if (isNewPath)
                         {
                             currentPathPoints = new List<Vector2Int> { point };
+                            currentFromRoom = room;
                             isNewPath = false;
                         }
                         else
                         {
                             currentPathPoints.Add(point);
-                            resultPaths.Add(new Path(new List<Vector2Int>(currentPathPoints)));
+
+                            resultPaths.Add(new Path(new List<Vector2Int>(currentPathPoints), currentFromRoom,
+                                room));
 
                             currentPathPoints = new List<Vector2Int> { point };
+                            currentFromRoom = room;
                         }
                     }
                     else if (cellType == CellType.Hallway)
@@ -374,6 +374,23 @@ namespace MapGeneration.Presentation.MapInfo
 
             _paths = resultPaths;
         }
+
+
+        private Room FindRoomContainingPoint(Vector2Int point)
+        {
+            foreach (var room in _roomsBases)
+            {
+                if (room.Bounds.Contains(point))
+                {
+                    return room;
+                }
+            }
+
+            Debug.LogError("Room Not Found");
+
+            return null;
+        }
+
 
         private void EnsureUniquePaths()
         {

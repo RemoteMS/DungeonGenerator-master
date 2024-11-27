@@ -1,13 +1,13 @@
-using System.Collections.Generic;
-
 namespace MapGeneration.Presentation.MapInfo
 {
     public class MapData : IMap
     {
-        public List<RoomData> Rooms { get; }
-        public List<HallwayData> Hallways { get; }
+        public RoomData[] Rooms { get; }
+        public HallwayData[] Hallways { get; }
 
-        public MapData(List<RoomData> rooms, List<HallwayData> hallways)
+        public Graph Graph;
+
+        public MapData(RoomData[] rooms, HallwayData[] hallways)
         {
             Rooms = rooms;
             Hallways = hallways;

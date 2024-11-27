@@ -17,7 +17,7 @@ namespace MapGeneration.Presentation.MapInfo
         {
             Id = id;
             Bounds = bounds;
-            _position = bounds.position.ToVector3();
+            _position = bounds.position.ToVector3Int();
 
             CopyCells(cells);
             AddBoundaryWalls();
